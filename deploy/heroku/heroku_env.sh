@@ -31,5 +31,4 @@ export EMAIL_SMTP_PASSWORD=${MAILGUN_SMTP_PASSWORD:-mailhog}
 DOCKER_USER=$(whoami)
 export DOCKER_USER
 
-# We must run the caddy user as the docker user to prevent supervisord errors
-export BASEROW_CADDY_USER="${BASEROW_CADDY_USER:-$DOCKER_USER}"
+export BASEROW_CADDY_USER="${BASEROW_CADDY_USER:-root}"
