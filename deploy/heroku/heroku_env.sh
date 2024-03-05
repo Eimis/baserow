@@ -3,7 +3,7 @@
 set -euo pipefail
 
 export BASEROW_PUBLIC_URL=${BASEROW_PUBLIC_URL:-https://$HEROKU_APP_NAME.herokuapp.com}
-export BASEROW_CADDY_ADDRESSES=":$PORT"
+export BASEROW_CADDY_ADDRESSES=":${PORT}"
 export REDIS_URL=${REDIS_TLS_URL:-$REDIS_URL}
 export DJANGO_SETTINGS_MODULE='baserow.config.settings.heroku'
 export BASEROW_RUN_MINIMAL=yes
