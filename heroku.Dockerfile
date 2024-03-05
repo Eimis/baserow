@@ -5,7 +5,11 @@ FROM $FROM_IMAGE as image_base
 
 RUN apt-get remove -y "postgresql-$POSTGRES_VERSION" redis-server
 
-RUN apt-get install -y libcap2-bin
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install --no-install-recommends -y \
+    # Allows Caddy to bind to ports below 1024 without needing root privileges:
+    libcap2-bin
 
 ENV DATA_DIR=/baserow/data
 # We have to build the data dir in the docker image as Caddy does not allow it in their
