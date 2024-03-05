@@ -20,7 +20,7 @@ RUN mkdir -p "$DATA_DIR" && \
 COPY deploy/heroku/heroku_env.sh /baserow/supervisor/env/heroku_env.sh
 
 # Allow Caddy to bind to ports below 1024 without needing root privileges:
-RUN sudo setcap CAP_NET_BIND_SERVICE=+eip $(which caddy)
+RUN setcap CAP_NET_BIND_SERVICE=+eip $(which caddy)
 
 ENTRYPOINT []
 CMD []
