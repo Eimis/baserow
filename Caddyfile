@@ -38,7 +38,3 @@
 
 	reverse_proxy {$PRIVATE_WEB_FRONTEND_URL:localhost:3000}
 }
-
-{$BASEROW_CADDY_HTTP_CATCH_ALL} {
-    reverse_proxy {$PRIVATE_WEB_FRONTEND_URL:localhost:3000}
-}
