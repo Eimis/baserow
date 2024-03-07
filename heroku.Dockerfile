@@ -1,16 +1,10 @@
-#ARG FROM_IMAGE=baserow/baserow:1.22.3
+#ARG FROM_IMAGE=baserow/baserow:1.23.0
 ARG FROM_IMAGE=eimsss/baserow:latest
 # This is pinned as version pinning is done by the CI setting FROM_IMAGE.
 # hadolint ignore=DL3006
 FROM $FROM_IMAGE as image_base
 
 RUN apt-get remove -y "postgresql-$POSTGRES_VERSION" redis-server
-
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install --no-install-recommends -y \
-    # Allows Caddy to bind to ports below 1024 without needing root privileges:
-    libcap2-bin
 
 ENV DATA_DIR=/baserow/data
 # We have to build the data dir in the docker image as Caddy does not allow it in their
@@ -19,9 +13,6 @@ RUN mkdir -p "$DATA_DIR" && \
     chown -R 9999:9999 "$DATA_DIR"
 
 COPY deploy/heroku/heroku_env.sh /baserow/supervisor/env/heroku_env.sh
-
-# Allow Caddy to bind to ports below 1024 without needing root privileges:
-RUN setcap CAP_NET_BIND_SERVICE=+eip $(which caddy)
 
 ENTRYPOINT []
 CMD []
