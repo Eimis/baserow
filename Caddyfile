@@ -5,36 +5,48 @@
         burst 5
     }
 
-    {$BASEROW_CADDY_AUTO_REDIRECT}
-
     {$BASEROW_CADDY_GLOBAL_CONF}
 }
 
 {$BASEROW_CADDY_ADDRESSES} {
-	handle /api/* {
-		reverse_proxy {$PRIVATE_BACKEND_URL:localhost:8000}
-	}
+    tls {
+        on_demand
+    }
 
-	handle /ws/* {
-		reverse_proxy {$PRIVATE_BACKEND_URL:localhost:8000}
-	}
+    vars {
+        full_uri "{http.request.scheme}://{http.request.host}"
+    }
 
-	handle_path /media/* {
-		@downloads {
-			query dl=*
-		}
-		header @downloads Content-disposition "attachment; filename={query.dl}"
+    @is_baserow_tool {
+        expression {vars.full_uri}.startsWith("{$BASEROW_PUBLIC_URL}")
+    }
 
-		file_server {
-			root {$MEDIA_ROOT:/baserow/media/}
-		}
-	}
+    handle @is_baserow_tool {
+        handle /api/* {
+            reverse_proxy {$PRIVATE_BACKEND_URL:localhost:8000}
+        }
 
-	handle_path /static/* {
-		file_server {
-			root {$STATIC_ROOT:/baserow/static/}
-		}
-	}
+        handle /ws/* {
+            reverse_proxy {$PRIVATE_BACKEND_URL:localhost:8000}
+        }
 
-	reverse_proxy {$PRIVATE_WEB_FRONTEND_URL:localhost:3000}
+        handle_path /media/* {
+            @downloads {
+                query dl=*
+            }
+            header @downloads Content-disposition "attachment; filename={query.dl}"
+
+            file_server {
+                root {$MEDIA_ROOT:/baserow/media/}
+            }
+        }
+
+        handle_path /static/* {
+            file_server {
+                root {$STATIC_ROOT:/baserow/static/}
+            }
+        }
+    }
+
+    reverse_proxy {$PRIVATE_WEB_FRONTEND_URL:localhost:3000}
 }
