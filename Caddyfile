@@ -21,6 +21,8 @@
         expression {vars.full_uri}.startsWith("{$BASEROW_PUBLIC_URL}")
     }
 
+    respond "{http.vars.full_uri} xxx {$BASEROW_PUBLIC_URL}"
+
     handle @is_baserow_tool {
         handle /api/* {
             reverse_proxy {$PRIVATE_BACKEND_URL:localhost:8000}
