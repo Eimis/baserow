@@ -17,6 +17,9 @@
   },
   "stack": "container",
   "env": {
+    "HEROKU_APP_NAME": {
+      "required": true
+    },
     "SECRET_KEY": {
       "description": "A unique string that is used to generate secrets.",
       "generator": "secret"
